@@ -58,6 +58,7 @@ public class KotlinSpringServerCodegen extends AbstractKotlinCodegen
     public static final String GRADLE_BUILD_FILE = "gradleBuildFile";
     public static final String SWAGGER_ANNOTATIONS = "swaggerAnnotations";
     public static final String SERVICE_INTERFACE = "serviceInterface";
+    public static final String RESPONSE_ENTITY = "responseEntity";
     public static final String SERVICE_IMPLEMENTATION = "serviceImplementation";
     public static final String REACTIVE = "reactive";
     public static final String INTERFACE_ONLY = "interfaceOnly";
@@ -72,6 +73,7 @@ public class KotlinSpringServerCodegen extends AbstractKotlinCodegen
     private boolean gradleBuildFile = true;
     private boolean swaggerAnnotations = false;
     private boolean serviceInterface = false;
+    private boolean responseEntity = true;
     private boolean serviceImplementation = false;
     private boolean reactive = false;
     private boolean interfaceOnly = false;
@@ -118,6 +120,7 @@ public class KotlinSpringServerCodegen extends AbstractKotlinCodegen
         addSwitch(SERVICE_INTERFACE, "generate service interfaces to go alongside controllers. In most " +
                 "cases this option would be used to update an existing project, so not to override implementations. " +
                 "Useful to help facilitate the generation gap pattern", serviceInterface);
+        addSwitch(RESPONSE_ENTITY, "generate response entity using first return code", responseEntity);
         addSwitch(SERVICE_IMPLEMENTATION, "generate stub service implementations that extends service " +
                 "interfaces. If this is set to true service interfaces will also be generated", serviceImplementation);
         addSwitch(USE_BEANVALIDATION, "Use BeanValidation API annotations to validate data types", useBeanValidation);
@@ -194,6 +197,14 @@ public class KotlinSpringServerCodegen extends AbstractKotlinCodegen
 
     public void setServiceInterface(boolean serviceInterface) {
         this.serviceInterface = serviceInterface;
+    }
+
+    public boolean getResponseEntity() {
+        return this.responseEntity;
+    }
+
+    public void setResponseEntity(boolean responseEntity) {
+        this.responseEntity = responseEntity;
     }
 
     public boolean getServiceImplementation() {
@@ -306,6 +317,11 @@ public class KotlinSpringServerCodegen extends AbstractKotlinCodegen
             this.setServiceInterface(Boolean.valueOf(additionalProperties.get(SERVICE_INTERFACE).toString()));
         }
         writePropertyBack(SERVICE_INTERFACE, serviceInterface);
+
+        if (additionalProperties.containsKey(RESPONSE_ENTITY)) {
+            this.setResponseEntity(Boolean.valueOf(additionalProperties.get(RESPONSE_ENTITY).toString()));
+        }
+        writePropertyBack(RESPONSE_ENTITY, responseEntity);
 
         if (additionalProperties.containsKey(SERVICE_IMPLEMENTATION)) {
             this.setServiceImplementation(Boolean.valueOf(additionalProperties.get(SERVICE_IMPLEMENTATION).toString()));

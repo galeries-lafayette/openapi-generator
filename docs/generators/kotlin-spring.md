@@ -24,6 +24,7 @@ sidebar_label: kotlin-spring
 |gradleBuildFile|generate a gradle build file using the Kotlin DSL| |true|
 |swaggerAnnotations|generate swagger annotations to go alongside controllers and models| |false|
 |serviceInterface|generate service interfaces to go alongside controllers. In most cases this option would be used to update an existing project, so not to override implementations. Useful to help facilitate the generation gap pattern| |false|
+|responseEntity|generate response entity using first return code| |true|
 |serviceImplementation|generate stub service implementations that extends service interfaces. If this is set to true service interfaces will also be generated| |false|
 |useBeanValidation|Use BeanValidation API annotations to validate data types| |true|
 |reactive|use coroutines for reactive behavior| |false|
