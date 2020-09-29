@@ -36,6 +36,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.openapitools.codegen.utils.StringUtils.camelize;
 
@@ -181,7 +182,7 @@ public class SpringCodegen extends AbstractJavaCodegen
                 .filter(e -> !Arrays.asList(API_FIRST, "hideGenerationTimestamp").contains(e.getKey()))
                 .filter(e -> cliOptions.stream().map(CliOption::getOpt).anyMatch(opt -> opt.equals(e.getKey())))
                 .map(e -> Pair.of(e.getKey(), e.getValue().toString()))
-                .collect(Collectors.toList());
+                .collect(toList());
         additionalProperties.put("configOptions", configOptions);
 
         // Process java8 option before common java ones to change the default dateLibrary to java8.
@@ -521,6 +522,7 @@ public class SpringCodegen extends AbstractJavaCodegen
         }
 
         if (openAPI.getPaths() != null) {
+
             for (String pathname : openAPI.getPaths().keySet()) {
                 PathItem path = openAPI.getPaths().get(pathname);
                 if (path.readOperations() != null) {
@@ -542,6 +544,14 @@ public class SpringCodegen extends AbstractJavaCodegen
                             }
                             operation.addExtension("x-tags", tags);
                         }
+                    }
+
+                    List<String> tags = path.readOperations().stream()
+                        .flatMap(operation -> operation.getTags().stream())
+                        .collect(toList());
+
+                    if(! tags.isEmpty()) {
+                        additionalProperties.put("frecco", tags.stream().reduce((a, b) -> a + "," + b));
                     }
                 }
             }

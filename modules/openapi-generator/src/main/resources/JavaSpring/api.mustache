@@ -8,6 +8,9 @@ package {{package}};
 {{#imports}}import {{import}};
 {{/imports}}
 import io.swagger.annotations.*;
+{{frecco}}
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
 {{#jdk8-no-delegate}}
 {{#virtualService}}
 import io.virtualan.annotation.ApiVirtual;
@@ -58,6 +61,7 @@ import java.util.concurrent.{{^jdk8}}Callable{{/jdk8}}{{#jdk8}}CompletableFuture
 {{/async}}
 {{>generatedAnnotation}}
 {{#useBeanValidation}}
+{{#tags}}@Tags(value = { @Tag(name = "{{tag}}") }){{/tags}}
 @Validated
 {{/useBeanValidation}}
 @Api(value = "{{{baseName}}}", description = "the {{{baseName}}} API")
