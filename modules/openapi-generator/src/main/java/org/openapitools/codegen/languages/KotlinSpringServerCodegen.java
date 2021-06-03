@@ -22,8 +22,10 @@ import com.samskivert.mustache.Template;
 import com.samskivert.mustache.Mustache.Lambda;
 
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.media.Schema;
 import org.openapitools.codegen.*;
 import org.openapitools.codegen.languages.features.BeanValidationFeatures;
+import org.openapitools.codegen.utils.ModelUtils;
 import org.openapitools.codegen.utils.URLPathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -409,6 +411,16 @@ public class KotlinSpringServerCodegen extends AbstractKotlinCodegen
     protected Builder<String, Lambda> addMustacheLambdas() {
         return super.addMustacheLambdas()
                 .put("escapeDoubleQuote", new EscapeLambda("\"", "\\\""));
+    }
+
+    @Override
+    public CodegenModel fromModel(String name, Schema model) {
+        CodegenModel codegenModel = super.fromModel(name, model);
+        if (codegenModel.discriminator != null && additionalProperties.containsKey("jackson")) {
+            codegenModel.imports.add("JsonSubTypes");
+            codegenModel.imports.add("JsonTypeInfo");
+        }
+        return codegenModel;
     }
 
     @Override
