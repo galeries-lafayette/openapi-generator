@@ -224,7 +224,7 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
     @Override
     public String escapeQuotationMark(String input) {
         // remove " to avoid code injection
-        return input.replace("\"", "");
+        return input.replaceAll("\"", "");
     }
 
     @Override
@@ -927,7 +927,7 @@ public abstract class AbstractKotlinCodegen extends DefaultCodegen implements Co
             if (p.getDefault() != null) {
                 String _default = (String) p.getDefault();
                 if (p.getEnum() == null) {
-                    return "\"" + escapeText(_default) + "\"";
+                    return escapeText(_default);
                 } else {
                     // convert to enum var name later in postProcessModels
                     return _default;
